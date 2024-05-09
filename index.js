@@ -1,17 +1,31 @@
 // POST/URL-> generates short url
-// GET/:id-> redirects user to original url
+// GET/URL/:id-> redirects user to original url
 // GET/URL/analytics/:id -> no of clicks of url
 const express = require("express");
-const mongoose = require("mongoose");
 const URL = require("./models/url");
 const PORT = 8001;
 const app = express();
 const router = require("./router/url");
+const staticRoute = require("./router/staticRouter");
 const connectMongodb = require("./connection");
+const path = require("path");
+
 connectMongodb("mongodb://localhost:27017/urlShortener");
 app.use(express.json());
+//to support form data as well
+app.use(express.urlencoded({ extended: false }));
 app.use("/url", router);
-app.get("/:shortId", async (req, res) => {
+app.set("view engine", "ejs");
+app.set("views", path.resolve("./views"));
+app.use("/", staticRoute);
+// app.get("/test", async (req, res) => {
+//   const allUrls = await URL.find({});
+//   return res.render("home", {
+//     urls: allUrls,
+//   });
+// });
+
+app.get("/url/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
   const entry = await URL.findOneAndUpdate(
     { shortId },
@@ -30,6 +44,7 @@ app.get("/:shortId", async (req, res) => {
   //as while searching https:// needed in search engine
   res.redirect("https://" + entry.redirectUrl);
 });
+
 app.listen(PORT, () => {
   console.log("server started");
 });

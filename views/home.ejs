@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+
+      color: rgb(250, 135, 20);
+      border-bottom: dashed 5px rgb(250, 135, 20);
+      padding: 15px;
+      margin-bottom: 45px;
+    }
+
+    .urlInput {
+      padding: 5px;
+      outline: none;
+      border: none;
+      border-bottom: solid 2px black;
+    }
+
+    .inputText {
+      font-weight: 600;
+      font-size: 25px;
+      margin: 3px;
+      color: black;
+    }
+
+    .urlInput::placeholder {
+      color: rgb(212, 210, 210);
+    }
+
+    .inputForm {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn {
+      cursor: pointer;
+      font-weight: 400;
+      color: white;
+      background-color: rgb(250, 135, 20);
+      border: none;
+      outline: none;
+      padding: 8px;
+      border-radius: 3px;
+    }
+
+    .urlList {
+      width: 65%;
+      margin-top: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .listItem {
+      color: rgb(250, 135, 20)
+    }
+
+    a {
+      text-decoration: none;
+      color: rgb(250, 135, 20);
+    }
+  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+</head>
+
+<body>
+  <h1>URL Shortener</h1>
+  <div>
+    <form method="POST" action="/url" name="" class="inputForm">
+      <label class="inputText">Enter your original URL</label>
+      <!-- as body.url in pst hence send url in name  -->
+      <input class="urlInput" name="url" type="text" placeholder="www.example.com">
+      <button class="btn" type="submit">Generate</button>
+    </form>
+    <!-- if backend se id aaya i.e. url pasted shortUrl generated -->
+    <% if (locals.id) { %>
+    <p>URL generated : <a href="http://localhost:8001/url/<%= id %>"> http://localhost:8001/url/<%= id %></a></p>
+    <% } %>
+  </div>
+  <div>
+    <% if (locals.urls) { %>
+    <table class="urlList">
+      <thead>
+        <th>Sr. No.</th>
+        <th>ShortId</th>
+        <th>Redirect URL</th>
+        <th>No. of clicks</th>
+      </thead>
+      <tbody>
+        <% urls.forEach((url,index) => { %>
+        <tr>
+          <td class="listItem"><strong><%= index+1 %></strong></td>
+          <td class="listItem"><%= url.shortId %></td>
+          <td><%= url.redirectUrl %></td>
+          <td class="listItem"><%= url.visitHistory.length %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <% } %>
+  </div>
+
+</body>
+
+</html>
