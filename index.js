@@ -7,6 +7,7 @@ const PORT = 8001;
 const app = express();
 const cookieParser = require("cookie-parser");
 const { restrictToLoggedInUserOnly } = require("./middlewares/auth");
+const { checkAuth } = require("./middlewares/auth");
 const router = require("./router/url");
 const staticRoute = require("./router/staticRouter");
 const userRoute = require("./router/user");
@@ -23,10 +24,10 @@ app.use(cookieParser()); //to parse and use cookies
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
-app.use("/", staticRoute);
+app.use("/", checkAuth, staticRoute);
 //to perform any action on /url you must be logged in
 app.use("/url", restrictToLoggedInUserOnly, router);
-app.use("/user", userRoute);
+app.use("/user", checkAuth, userRoute);
 
 app.get("/url/:shortId", async (req, res) => {
   const shortId = req.params.shortId;

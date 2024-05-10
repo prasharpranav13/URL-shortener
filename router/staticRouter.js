@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const URL = require("../models/url");
+
 router.get("/", async (req, res) => {
-  const allUrls = await URL.find({});
+  if (!req.user) return res.redirect("/login");
+  //to get only those url's that's gen by that user himself
+  const allUrls = await URL.find({ createdBy: req.user._id });
   return res.render("home", {
     urls: allUrls,
   });
