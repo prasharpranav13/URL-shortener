@@ -17,6 +17,11 @@ const urlSchema = new mongoose.Schema(
         },
       },
     ],
+    //This line specifies that the createdBy field in your URL schema will store the ObjectID of a document from the "users" collection. The ref: "users" part tells Mongoose which collection this ObjectID references.
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
   },
   { timestamps: true }
 );
