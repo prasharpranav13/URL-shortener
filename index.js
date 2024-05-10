@@ -5,8 +5,11 @@ const express = require("express");
 const URL = require("./models/url");
 const PORT = 8001;
 const app = express();
+
 const router = require("./router/url");
 const staticRoute = require("./router/staticRouter");
+const userRoute = require("./router/user");
+
 const connectMongodb = require("./connection");
 const path = require("path");
 
@@ -14,16 +17,13 @@ connectMongodb("mongodb://localhost:27017/urlShortener");
 app.use(express.json());
 //to support form data as well
 app.use(express.urlencoded({ extended: false }));
-app.use("/url", router);
+
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
+
 app.use("/", staticRoute);
-// app.get("/test", async (req, res) => {
-//   const allUrls = await URL.find({});
-//   return res.render("home", {
-//     urls: allUrls,
-//   });
-// });
+app.use("/url", router);
+app.use("/user", userRoute);
 
 app.get("/url/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
