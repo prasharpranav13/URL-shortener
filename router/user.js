@@ -20,10 +20,10 @@ router.post("/login", async (req, res) => {
   const user = await User.findOne({ email, password });
   //not available
   if (!user) return res.render("login", { error: "user not found" });
-  const sessionId = uuidv4();
-  setUser(sessionId, user);
+  //we no longer need sessionId, we'll  use token
+  const token = setUser(user);
   //cookie name-> uid
-  res.cookie("uid", sessionId);
+  res.cookie("uid", token);
   return res.redirect("/");
 });
 

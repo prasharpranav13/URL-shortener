@@ -42,11 +42,6 @@ app.get("/url/:shortId", async (req, res) => {
       },
     }
   );
-  // console.log(entry);
-  // console.log(entry.redirectUrl);
-  //if you are entering www.google.com
-  //as while searching https:// needed in search engine
-  // res.redirect("https://" + entry.redirectUrl);
   res.redirect(entry.redirectUrl);
 });
 
